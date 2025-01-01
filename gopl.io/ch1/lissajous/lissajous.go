@@ -1,4 +1,5 @@
-package main
+// gopl.io/ch1/lissajous/main.go
+package lissajous
 
 import (
 	"image"
@@ -6,24 +7,24 @@ import (
 	"image/gif"
 	"io"
 	"math"
-	"math/rand/v2"
-	"os"
+	"math/rand"
 )
 
-var palette = []color.Color{color.White, color.RGBA{0x00, 0x00, 0xBB, 0xff}}
+var palette = []color.Color{color.White, color.Black}
 
 const (
 	whiteIndex = 0
 	blackIndex = 1
 )
 
-func lissajous(out io.Writer) {
+// Lissajous generates a Lissajous curve and writes it to out as a GIF.
+func Lissajous(out io.Writer) {
 	const (
-		cycles  = 100
-		res     = 0.001
-		size    = 10
+		cycles  = 5
+		res     = 0.005
+		size    = 200
 		nframes = 64
-		delay   = 100
+		delay   = 10
 	)
 
 	freq := rand.Float64() * 3.0
@@ -42,16 +43,4 @@ func lissajous(out io.Writer) {
 		anim.Image = append(anim.Image, img)
 	}
 	gif.EncodeAll(out, &anim)
-}
-
-func main() {
-	// 创建一个 GIF 文件
-	file, err := os.Create("output.gif")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-
-	// 将图形数据写入文件
-	lissajous(file)
 }
